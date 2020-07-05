@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import socketIOClient from 'socket.io-client';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      endpoint: 'http://localhost:4001',
+      id: "",
+      clients: [],
+    };
+  }
+
+  componentDidMount() {
+    const { endpoint } = this.state;
+    const socket = socketIOClient(endpoint);
+    socket.on("connect", () => {
+      socket.emit("addClient", socket.id);
+    });
+    socket.on("updateClients", res => {
+      this.setState({
+        clients: res,
+      });
+    });
+  }
+
+  render() {
+    const { id } = this.state;
+
+    const clients = this.state.clients.map(client => {
+      return (
+        <li key={client.id}>
+          {client.username}
+        </li>
+      );
+    });
+    return (
+      <div className="App">
+        <div>Hello {this.state.username}</div>
+        <div>
+          Players
+          <ul>
+            {clients}
+          </ul>
+        </div>
+        <button>Click</button>
+      </div>
+    );
+  };
 }
 
 export default App;
