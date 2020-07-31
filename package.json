@@ -15,7 +15,7 @@
     "semantic-ui-react": "^0.88.2",
     "socketio": "^1.0.0",
     "uuid": "^8.2.0",
-    "snyk": "^1.360.0"
+    "snyk": "^1.361.3"
   },
   "scripts": {
     "start": "react-scripts start",
